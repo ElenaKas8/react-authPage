@@ -32,19 +32,22 @@ function FormElem(props) {
         <h2>{title}</h2>
 
         <p>{input.email}</p>
-        <Input {...register('email')} />
-
+        <Input {...register('email', { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ })} />
+        {errors.email && <p className={style.warning_text}>Введите свою почту</p>}
         {type !== 'reset' && 
           <>
             <p>{input.password}</p>
-            <Input {...register('password')} />
+            <Input {...register('password', { required: true, minLength: 8, pattern: /^(?=.*[A-Z]).+$/ })} />
+            {errors.password && <p className={style.warning_text}>Минимум 8 символов и 1 заглавная буква</p>}
           </>
         }
 
         {type === 'register' && 
           <>
             <p>{input.repeatPassword}</p>
-            <Input {...register('repeatPassword')} />
+            <Input {...register('repeatPassword', { required:('Пароли не совпадают') ,
+             validate: value => value === watch('password') })} />
+            {errors.repeatPassword && <p className={style.warning_text}>Пароли не совпадают</p>}
           </>
         }
 
